@@ -8,17 +8,19 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// routes
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
+
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/workout", {
-  useNewUrlParser: true,
-  useFindAndModify: false
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/workout";
+
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useFindAndModify: false
 });
 
-// routes
-app.use(require("./routes/apiRoutes"));
-app.use(require("./routes/htmlRoutes"))
-
 app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}!`);
+    console.log(`App running on port ${PORT}!`);
 });
